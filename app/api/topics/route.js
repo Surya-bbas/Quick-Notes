@@ -4,9 +4,20 @@ import { NextResponse } from "next/server"
 
 export async function POST(req){
     const {topic_title,topic_description} = await req.json()
-    await connectMongoDB()
-    console.log(topic_description,topic_title);
-    const data = await Topic.create({topic_title,topic_description})
-    console.log(data);
+    await connectMongoDB()    
+    const data = await Topic.create({topic_title,topic_description})    
     return NextResponse.json({message:'Topic Created'},{status:201})
+} 
+
+export async function GET(req){
+    await connectMongoDB()
+    const data = await Topic.find({})
+    return NextResponse.json({data})
+}
+
+export async function DELETE(request,) {  
+    const id = request.nextUrl.searchParams.get('id')
+    await connectMongoDB()
+    await Topic.deleteOne({_id:id})
+    return NextResponse.json({message:"item deleted"}, {status:201})
 }
